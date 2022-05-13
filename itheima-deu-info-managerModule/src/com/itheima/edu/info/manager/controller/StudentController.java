@@ -8,6 +8,9 @@ import java.util.Scanner;
 //和用户打交道（客服接待）
 public class StudentController {
 
+    //首先创建业务员对象（作用域为整个类），并且用private修饰，禁止外类访问
+    private StudentService studentService = new StudentService();
+
     //开启学生管理系统，并且展示学生管理系统菜单
     public void start() {
 
@@ -37,7 +40,9 @@ public class StudentController {
                     System.out.println("修改学生");
                     break;
                 case "4":
-                    System.out.println("查看学生");
+                    //System.out.println("查看学生");
+                    //创建查看学生方法
+                    findAllStudent();
                     break;
                 case "5":
                     System.out.println("已退出，欢迎您下次使用学生管理系统！");
@@ -52,25 +57,45 @@ public class StudentController {
 
     }
 
-    public void addStudent() {
+    public void findAllStudent() {
 
-        //首先创建业务员对象
-        StudentService studentService = new StudentService();
+        //1调用业务员中的获取方法，得到学生的对象数组
+        Student[] stus = studentService.findAllStudent();
+        //2 判断数组的内存地址是否为null
+        if (stus == null) {
+            System.out.println("查无信息，请添加后重试！");
+            //retun空，结束这个findAllStudent方法，当然if语句也结束了
+            return;
+        }
+        //3 不是null，遍历数组，获取学生信息并且打印在控制台
+        System.out.println("学号\t\t姓名\t年龄\t生日");
+        for (int i = 0; i < stus.length; i++) {
+            //得到具体的学生对象
+            Student stu = stus[i];
+            //如果stus数组没装满stu学生对象，可能会存在null，打印之前先做一个判断
+            if (stu != null) {
+                System.out.println(stu.getId() + "\t" + stu.getName() + "\t" + stu.getAge() + "\t\t" + stu.getBirthday());
+            }
+        }
+
+    }
+
+    public void addStudent() {
 
         //1键盘接受学生信息
         Scanner sc = new Scanner(System.in);
 
         //对学生学号判断是否已被占用，提示用户
         String id;//放在循环中定义只能在循环中使用，可以放到外面定义，提升作用域，使得下方也可正常使用
-        while(true){
+        while (true) {
             System.out.println("请输入学生学号：");
             id = sc.next();
             //调用StudentService业务员类中的idExists方法，把id传入该方法，接收一个布尔返回值判断是否添加学号成功
             boolean flag = studentService.isExists(id);
-            if(flag){
+            if (flag) {
                 //true表示输入的学号已被占用
                 System.out.println("此学号已被占用，请重新输入！");
-            }else{
+            } else {
                 //没有被占用就结束循环
                 break;
             }

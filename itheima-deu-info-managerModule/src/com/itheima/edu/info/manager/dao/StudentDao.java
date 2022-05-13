@@ -6,7 +6,9 @@ import com.itheima.edu.info.manager.domain.Student;
 public class StudentDao {
 
     //1创建学生对象数组，类型为Student，大小为5
-    private Student[] stus = new Student[5];//私有化 ，不让外类访问这里的stus
+    /*私有化 ，不让外类访问这里的stus数组，static修饰后可以被StudentDao类的所有对象共享
+     * 避免出现创建多个类时创建多个数组*/
+    private static Student[] stus = new Student[5];
 
     public boolean addStudent(Student stu) {
 
