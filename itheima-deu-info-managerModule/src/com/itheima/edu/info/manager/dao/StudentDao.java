@@ -8,7 +8,7 @@ public class StudentDao {
     //1创建学生对象数组，类型为Student，大小为5
     /*私有化 ，不让外类访问这里的stus数组，static修饰后可以被StudentDao类的所有对象共享
      * 避免出现创建多个类时创建多个数组*/
-    private static Student[] stus = new Student[5];
+    private static Student[] stus = new Student[5];//非静态可以访问静态
 
     public boolean addStudent(Student stu) {
 
@@ -42,5 +42,37 @@ public class StudentDao {
     public Student[] findAllStudent() {
         //返回学生数组
         return stus;
+    }
+
+    public void deleteStudentById(String delId) {
+        //1 查找id在数组容器中的索引位置
+        int index = getIndex(delId);
+        //2 将该索引位置使用null覆盖
+        stus[index] = null;
+    }
+
+    //根据id找索引的位置，封装成一个方法
+    public int getIndex(String id) {
+        //首先假设id不存在，记录索引为-1
+        int index = -1;
+        //遍历数组获取每一个对象
+        for (int i = 0; i < stus.length; i++) {
+            Student stu = StudentDao.stus[i];
+            if (stu != null && stu.getId().equals(id)) {
+                index = i;
+                //记录好i索引，结束当前for循环
+                break;
+            }
+        }
+
+        //返回索引值结果
+        return index;
+    }
+
+    public void updateStudent(String updateId, Student newstudent) {
+        //1 查找要修改的学生对象在数组容器中的索引位置
+        int index = getIndex(updateId);
+        //2 使用新的学生对象替换
+        stus[index] = newstudent;
     }
 }

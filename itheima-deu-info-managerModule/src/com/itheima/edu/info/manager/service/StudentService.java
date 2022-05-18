@@ -59,4 +59,14 @@ public class StudentService {
         }
 
     }
+
+    public void deleteStudentById(String delId) {
+        //调用库管dao中的删除方法，把这里接收到的delId传进去就可以了
+        studentDao.deleteStudentById(delId);
+    }
+
+    public void updateStudent(String updateId, Student newstudent) {
+        //这里主要起到传递的作用，把接收到的两个对象传入Dao库管
+        studentDao.updateStudent(updateId,newstudent);
+    }
 }
